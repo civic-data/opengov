@@ -242,5 +242,14 @@ gulp.task('default', ['clean'], function (cb) {
 // Adds tasks for `gulp test:local` and `gulp test:remote`
 try { require('web-component-tester').gulp.init(gulp); } catch (err) {}
 
+var deploy      = require('gulp-gh-pages');
+/**
+* Push build to gh-pages
+*/
+gulp.task('deploy', function () {
+return gulp.src("./dist/**/*")
+.pipe(deploy())
+});
+
 // Load custom tasks from the `tasks` directory
 try { require('require-dir')('tasks'); } catch (err) {}
