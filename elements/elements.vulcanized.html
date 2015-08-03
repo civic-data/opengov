@@ -17497,4 +17497,201 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     });
   })();
 </script>
+<dom-module id="opengov-ny" assetpath="opengov-ny/">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+      <template>
+
+<template is="dom-if" if="{{loading}}">
+
+<paper-spinner active="" id="spinner"></paper-spinner>
+</template> 
+
+
+        <paper-input label="Search?" value="{{term}}"></paper-input>
+
+
+
+        <br>
+
+        <div style="text-align:center; padding:10px;">
+          <paper-button tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchPractice">Search</paper-button>
+        </div>
+
+        <iron-ajax id="OpenGovSearch" url="https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp" params="{{ajaxParams}}" handle-as="json" last-response="{{data}}" loading="{{loading}}" activerequests="{{active}}" on-error="handleError">
+
+        </iron-ajax>
+
+        <br><br>
+        
+
+           <template is="dom-if" if="{{loading}}">
+           <div>
+                pending:<span id="pending"></span>
+           </div>
+          <template is="dom-repeat" items="{{data.response.results}}">
+            <p><span>{{item.otype}}</span> 
+            <span>{{item.oid}}</span> 
+            </p><div><a href="{{item.url}}">{{item.url}}</a></div>
+            <paper-material elevation="1">
+            </paper-material>
+            <p></p>
+          </template>
+           </template>
+
+           <template is="dom-if" if="{{data.response.metadata.totalresults}}">
+           <div>
+                <b>total results available: </b><span>{{data.response.metadata.totalresults}}</span>
+           </div>
+           </template>
+
+        <div id="SearchResult">
+        </div>
+        <div id="SearchResult2">
+        </div>
+
+      </template>
+</dom-module>
+      <script>
+        Polymer({
+
+          is: 'opengov-ny',
+
+          properties: {
+            pageIdx: { type:Number, value:1 },
+            url: {
+                type:String
+                //,
+                //default: "https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp?pageSize=1&pageIdx=1&sort=modified&sortOrder=true&term=test%20-otype%3Atranscript&callback=a"
+                },
+            ajaxParams: {
+              type: String,
+              computed: 'buildSearchRequest(pageIdx,term)'
+            }
+          },
+
+          stringify: JSON.stringify, 
+
+          buildSearchRequest: function (pageIdx,term) {
+            //document.querySelector("#SearchResult").innerHTML='';
+            return {
+              //Command: 'Search',
+              //Criteria: searchCriterion,
+              pageIdx: parseInt(pageIdx),
+              pageSize: '1',
+              sort:'modified',
+              sortOrder:true,
+              term: term,
+              //term:'test -otype:transcript',
+              callback:'a'
+            };
+          },
+
+          searchPractice: function () {
+            this.$.OpenGovSearch.generateRequest();
+          },
+
+          //ajaxResponse: function(e, request) {
+            //var headers = request.xhr.getAllResponseHeaders();
+            //},
+
+          handleError: function(e) {
+            window.alert('Whoops! ' + e.detail);
+            console.error('Whoops! ' + e.detail);
+          }
+
+        });
+      </script>
+
+<script>
+    (function (document) {
+        'use strict';
+
+
+        window.addEventListener('WebComponentsReady', function() {
+            var ironAjax = document.querySelector('iron-ajax');
+            ironAjax.addEventListener('response', function(e) {
+                if (this.params.pageIdx === 1){
+                    document.querySelector('#SearchResult2').innerHTML='';
+                }
+                if ( document.querySelector('#pending') !== null && ironAjax.activeRequests !== null){
+                    document.querySelector('#pending').innerHTML=
+                    ironAjax.activeRequests.length  + ' progress: ('+ 
+                    (this.lastResponse.response.metadata.totalresults - ironAjax.activeRequests.length)  + ' of ' + this.lastResponse.response.metadata.totalresults + ') ';
+                }
+
+                if( e.detail.response !== null){
+
+                var documentBody = document.querySelector('#SearchResult2');
+                    if(true && documentBody !== null){ 
+                    documentBody.appendChild( document.createElement('hr')); 
+                    var divx=document.createElement('div'); 
+                    divx.innerHTML='<b><a href="'+e.detail.xhr.responseURL+'">'+
+                    e.detail.xhr.responseURL+'</a></b>';
+                    //documentBody.appendChild( div ); 
+                    }
+                for(var i=0; i < e.detail.response.response.results.length; i++){
+                    if(true && documentBody !== null){ 
+                    var div=document.createElement('div'); 
+                    var fulltext='';
+                    var title='';
+                    var sponsor='';
+                    var active=false;
+                    var actions='';
+                    var actclause='';
+                    if(e.detail.response.response.results[i].otype==='bill'){
+                    //console.log( e.detail.response.response.results[i].data); 
+                    fulltext= e.detail.response.response.results[i].data.bill.fulltext;
+                    title= e.detail.response.response.results[i].data.bill.title;
+                    sponsor= JSON.stringify(e.detail.response.response.results[i].data.bill.sponsor);
+                    active = e.detail.response.response.results[i].data.bill.active;
+
+                    actions= JSON.stringify(e.detail.response.response.results[i].data.bill.actions);
+                    actions='';
+                    for(var j=0; j < e.detail.response.response.results[i].data.bill.actions.length; j++){
+                    actions += 
+                     //JSON.stringify(e.detail.response.response.results[i].data.bill.actions[j]);
+                     '<br>' +new Date(parseInt(e.detail.response.response.results[i].data.bill.actions[j].date)) +
+                     ' ' + e.detail.response.response.results[i].data.bill.actions[j].text 
+                     ;
+                    }
+
+
+                    actclause = e.detail.response.response.results[i].data.bill.actClause;
+                    } else {
+                    title = 'other: ' + e.detail.response.response.results[i].otype;
+                    }
+                    div.innerHTML='<br>'+
+                    '<paper-header-panel class="flex"><div class="paper-header">' +
+                    '<b>Title:</b>&nbsp;' + title + '<br>'+
+                    '<b>Sponsor(s):</b>&nbsp;' + sponsor + '<br>' +
+                    '<b>Action(s):</b>&nbsp;' + actions + '<br>' +
+                    '<b>Active:</b>&nbsp;' + active + '<br>' +
+                    '<b>Act Clause:</b>&nbsp;' + actclause + '<br>' +
+                    '<b>Link:</b>&nbsp;<a href="' + e.detail.response.response.results[i].url + '">' +
+                     e.detail.response.response.results[i].url + '</a><br>' +
+                    '</div></paper-header-panel>' + 
+                    '<paper-material evalation="2">' + fulltext + '</paper-material>'
+                    ;
+                    documentBody.appendChild( div ); 
+
+                    }
+                }
+                }
+
+                if (this.params.pageIdx === 1){
+                while (++this.params.pageIdx <= this.lastResponse.response.metadata.totalresults){
+ironAjax.generateRequest();
+                }
+                }
+            });
+            //ironAjax.generateRequest();
+        });
+
+    })(document);
+
+</script>
 </div></body></html>
