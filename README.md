@@ -1,6 +1,8 @@
 ![](https://cloud.githubusercontent.com/assets/110953/7877439/6a69d03e-0590-11e5-9fac-c614246606de.png) 
 ## Open Government Starter Kit (based on Polymer Starter Kit)
 
+> [Demo](https://civic-data.github.io/opengov/#!/opengov/)
+
 > A starting point for building web applications with Polymer 1.0
 
 ### Included out of the box:
