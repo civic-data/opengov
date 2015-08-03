@@ -1,6 +1,6 @@
 {
   "name": "polymer-starter-kit",
-  keywords: [
+  "keywords": [
           'web-components'
             ],
   "private": true,
