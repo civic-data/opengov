@@ -62,7 +62,7 @@ value="{{term}}"></paper-input>
 
            <template is="dom-if" if="{{loading}}">
            <div>
-                pending:<span id="pending"></span>
+                pending:&nbsp;<span id="pending"></span>
            </div>
           <template is="dom-repeat" items="{{data.response.results}}">
             <p><span>{{item.otype}}</span> 
