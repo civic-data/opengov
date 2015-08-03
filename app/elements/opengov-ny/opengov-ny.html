@@ -84,7 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <script>
         Polymer({
 
-          is: "opengov-ny",
+          is: 'opengov-ny',
 
           properties: {
             pageIdx: { type:Number, value:1 },
@@ -120,12 +120,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             this.$.OpenGovSearch.generateRequest();
           },
 
-          ajaxResponse: function(e, request) {
-            var headers = request.xhr.getAllResponseHeaders();
-            },
+          //ajaxResponse: function(e, request) {
+            //var headers = request.xhr.getAllResponseHeaders();
+            //},
 
           handleError: function(e) {
-            alert('Whoops! ' + e.detail);
+            window.alert('Whoops! ' + e.detail);
+            console.error('Whoops! ' + e.detail);
           }
 
         });
@@ -140,30 +141,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var ironAjax = document.querySelector('iron-ajax');
             ironAjax.addEventListener('response', function(e) {
                 if (this.params.pageIdx === 1){
-                    document.querySelector("#SearchResult2").innerHTML='';
+                    document.querySelector('#SearchResult2').innerHTML='';
                 }
-                if ( document.querySelector('#pending') != null
-                    && ironAjax.activeRequests != null){
+                if ( document.querySelector('#pending') !== null && ironAjax.activeRequests !== null){
                     document.querySelector('#pending').innerHTML=
                     ironAjax.activeRequests.length  + ' progress: ('+ 
-                    (this.lastResponse.response.metadata.totalresults
-                    -ironAjax.activeRequests.length)  + ' of ' + 
-                    this.lastResponse.response.metadata.totalresults + ') ';
+                    (this.lastResponse.response.metadata.totalresults - ironAjax.activeRequests.length)  + ' of ' + this.lastResponse.response.metadata.totalresults + ') ';
                 }
 
-                if( e.detail.response != null){
+                if( e.detail.response !== null){
 
-                var document_body = document.querySelector("#SearchResult2");
-                    if(true && document_body != null){ 
-                    document_body.appendChild( document.createElement("hr")); 
-                    var div=document.createElement("div"); 
-                    div.innerHTML='<b><a href="'+e.detail.xhr.responseURL+'">'+
+                var documentBody = document.querySelector('#SearchResult2');
+                    if(true && documentBody !== null){ 
+                    documentBody.appendChild( document.createElement('hr')); 
+                    var divx=document.createElement('div'); 
+                    divx.innerHTML='<b><a href="'+e.detail.xhr.responseURL+'">'+
                     e.detail.xhr.responseURL+'</a></b>';
-                    //document_body.appendChild( div ); 
+                    //documentBody.appendChild( div ); 
                     }
                 for(var i=0; i < e.detail.response.response.results.length; i++){
-                    if(true && document_body != null){ 
-                    var div=document.createElement("div"); 
+                    if(true && documentBody !== null){ 
+                    var div=document.createElement('div'); 
                     var fulltext='';
                     var title='';
                     var sponsor='';
@@ -204,7 +202,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     '</div></paper-header-panel>' + 
                     '<paper-material evalation="2">' + fulltext + '</paper-material>'
                     ;
-                    document_body.appendChild( div ); 
+                    documentBody.appendChild( div ); 
 
                     }
                 }
