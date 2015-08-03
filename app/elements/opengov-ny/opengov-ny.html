@@ -23,23 +23,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <paper-spinner active id="spinner"></paper-spinner>
 </template> 
 
+<paper-drawer-panel>
+<paper-header-panel drawer>
+<paper-toolbar>
+<div>New York State</div>
+</paper-toolbar>
+<div>
+<paper-input 
+label="Search?"
+value="{{term}}"></paper-input>
+<br>
+<div style="text-align:center; padding:10px;">
+<paper-button tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchPractice">Search</paper-button>
+</div>
+</div>
+</paper-header-panel>
 
-        <paper-input 
-          label="Search?"
-          value="{{term}}"></paper-input>
 
-<!--
-        <paper-input 
-          label="Index?"
-          value="{{pageIdx}}"></paper-input>
--->
-
-        <br>
-
-        <div style="text-align:center; padding:10px;">
-          <paper-button tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchPractice">Search</paper-button>
-        </div>
-
+ <paper-header-panel main>
+        <paper-toolbar>
+          <paper-icon-button icon="menu" style="color: white;" paper-drawer-toggle></paper-icon-button>
+          <div>Results</div>
+        </paper-toolbar>
+<div>
         <iron-ajax id="OpenGovSearch"
              url="https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp"
                    params="{{ajaxParams}}"
@@ -78,6 +84,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
         <div id="SearchResult2">
         </div>
+
+
+</div>
+      </paper-header-panel>
+
+    </paper-drawer-panel>
 
       </template>
 </dom-module>
