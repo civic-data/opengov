@@ -1,0 +1,132 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="opengov-ny">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+      <template>
+
+<template is="dom-if" if="{{loading}}">
+<!-- <paper-progress value="10" indeterminate="true" style="width:100%;"></paper-progress> -->
+<paper-spinner active id="spinner"></paper-spinner>
+</template> 
+
+
+        <paper-input 
+          label="Search?"
+          value="{{term}}"></paper-input>
+
+<!--
+        <paper-input 
+          label="Index?"
+          value="{{pageIdx}}"></paper-input>
+-->
+
+        <br>
+
+        <div style="text-align:center; padding:10px;">
+          <paper-button tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchPractice">Search</paper-button>
+        </div>
+
+        <iron-ajax id="OpenGovSearch"
+             url="https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp"
+                   params="{{ajaxParams}}"
+                   handle-as="json"
+                   last-response="{{data}}"
+                   loading="{{loading}}"
+                   activeRequests="{{active}}"
+                   on-error="handleError">
+
+        </iron-ajax>
+
+        <br><br>
+        <!-- Parameters: <b>{{stringify(ajaxParams)}}</b> -->
+
+           <template is="dom-if" if="{{loading}}">
+           <div>
+                pending:<span id="pending"></span>
+           </div>
+          <template is="dom-repeat" items="{{data.response.results}}">
+            <p><span>{{item.otype}}</span> 
+            <span>{{item.oid}}</span> 
+            <div><a href="{{item.url}}">{{item.url}}</a></div>
+            <paper-material elevation="1">
+            </paper-material>
+            </p>
+          </template>
+           </template>
+
+           <template is="dom-if" if="{{data.response.metadata.totalresults}}">
+           <div>
+                <b>total results available: </b><span>{{data.response.metadata.totalresults}}</span>
+           </div>
+           </template>
+
+        <div id="SearchResult">
+        </div>
+        <div id="SearchResult2">
+        </div>
+
+      </template>
+</dom-module>
+      <script>
+        Polymer({
+
+          is: "opengov-ny",
+
+          properties: {
+            pageIdx: { type:Number, value:1 },
+            url: {
+                type:String
+                //,
+                //default: "https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp?pageSize=1&pageIdx=1&sort=modified&sortOrder=true&term=test%20-otype%3Atranscript&callback=a"
+                },
+            ajaxParams: {
+              type: String,
+              computed: 'buildSearchRequest(pageIdx,term)'
+            }
+          },
+
+          stringify: JSON.stringify, 
+
+          buildSearchRequest: function (pageIdx,term) {
+            //document.querySelector("#SearchResult").innerHTML='';
+            return {
+              //Command: 'Search',
+              //Criteria: searchCriterion,
+              pageIdx: parseInt(pageIdx),
+              pageSize: '1',
+              sort:'modified',
+              sortOrder:true,
+              term: term,
+              //term:'test -otype:transcript',
+              callback:'a'
+            };
+          },
+
+          searchPractice: function () {
+            this.$.OpenGovSearch.generateRequest();
+          },
+
+          ajaxResponse: function(e, request) {
+            var headers = request.xhr.getAllResponseHeaders();
+            },
+
+          handleError: function(e) {
+            alert('Whoops! ' + e.detail);
+          }
+
+        });
+      </script>
