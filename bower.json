@@ -1,5 +1,8 @@
 {
   "name": "polymer-starter-kit",
+  keywords: [
+          'web-components'
+            ],
   "private": true,
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#1.0.0",
