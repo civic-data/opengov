@@ -78,7 +78,7 @@ caches.keys().then(function(response) {
     }).then(function(z) {
         console.log('z', element, z);
         z.forEach(function(element, index, array) {
-            console.log('z1', element, element.url, index);
+            console.log('z1', element, element.url, index, array.length);
         })
     })
     })
