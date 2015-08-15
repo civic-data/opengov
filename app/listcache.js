@@ -65,3 +65,21 @@ caches.keys().then(function(response) {
     })
     })
 });
+
+caches.keys().then(function(response) {
+    console.log('111:keys', typeof response);
+    console.log('111:keys', response);
+    response.forEach(function(element, index, array) {
+        //cache.delete(element);
+        console.log('element', element, index, array);
+        caches.open(element).then(function(x) {
+            console.log('keys', x.keys());
+            return x.keys();
+    }).then(function(z) {
+        console.log('z', element, z);
+        z.forEach(function(element, index, array) {
+            console.log('z1', element, index);
+        })
+    })
+    })
+});
