@@ -83,3 +83,18 @@ caches.keys().then(function(response) {
     })
     })
 });
+
+caches.keys().then(function(response) {
+    response.forEach(function(element, index, array) {
+        caches.open(element).then(function(x) {
+            return x.keys();
+    }).then(function(items) {
+        items.forEach(function(element, index, array) {
+            //console.log('item', element, element.url, index, array.length);
+            var div = document.createElement('div');
+            div.innerHTML='<a href="'+element.url+'">'+element.url+'</a>';
+            document.body.appendChild(div);
+        })
+    })
+    })
+});
