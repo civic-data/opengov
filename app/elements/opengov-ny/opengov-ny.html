@@ -57,6 +57,9 @@ value="{{term}}"></paper-input>
 
         </iron-ajax>
 
+        <div id="Links">
+        </div>
+
         <br><br>
         <!-- Parameters: <b>{{stringify(ajaxParams)}}</b> -->
 
@@ -145,11 +148,84 @@ value="{{term}}"></paper-input>
       </script>
 
 <script>
+URL.prototype.__defineGetter__('query', function() {
+  var parsed = this.search.substr(1).split('&');
+
+  parsed.forEach(function(elem, iter, arr) {
+    var vals = arr[iter].split('=');
+    arr[iter] = {
+      key: vals[0],
+      value: vals[1]
+    };
+  });
+
+  return parsed;
+});
+
+URL.prototype.__defineGetter__('queryterm', function() {
+    var found=undefined;
+  var parsed = this.search.substr(1).split('&');
+
+  parsed.forEach(function(elem, iter, arr) {
+    var vals = arr[iter].split('=');
+    if( vals[0] === 'term'){
+        found=vals[1];
+    }
+    arr[iter] = {
+      key: vals[0],
+      value: vals[1]
+    };
+  });
+
+  //return parsed;
+  return found;
+});
+
+
+function appendurl(){
+caches.keys().then(function(response) {
+    response.forEach(function(element, index, array) {
+        caches.open(element).then(function(x) {
+            return x.keys();
+    }).then(function(items) {
+        map1={};
+        items.forEach(function(element, index, array) {
+            //console.log('item', element, element.url, index, array.length);
+
+            var parser = document.createElement('a');
+            parser.href = element.url;
+            //var params = JSON.stringify(new URL(element.url).query);
+            var params = JSON.stringify(new URL(element.url).queryterm);
+
+            var div = document.createElement('div');
+            //div.innerHTML='<b>'+index+' of ' + array.length+'</b><a href="'+element.url+'">'+element.url+'</a>';
+            //div.innerHTML='<b>'+index+' of ' + array.length+'</b>' + parser.search;
+            div.innerHTML='<b>'+index+' of ' + array.length+'</b>' + params;
+
+            //document.body.appendChild(div);
+            if (params in map1){
+                map1[params]++;
+            } else {
+                map1[params]=1;
+            }
+        })
+
+            var div = document.createElement('div');
+            div.innerHTML= JSON.stringify(map1);
+            console.log(div.innerHTML);
+            var documentBody = document.querySelector('#Links');
+            documentBody.appendChild(div);
+    })
+    })
+});
+}
     (function (document) {
         'use strict';
 
 
         window.addEventListener('WebComponentsReady', function() {
+
+            appendurl();
             var ironAjax = document.querySelector('iron-ajax');
             ironAjax.addEventListener('response', function(e) {
                 if (this.params.pageIdx === 1){
