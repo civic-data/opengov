@@ -35,7 +35,7 @@ label="Search?"
 value="{{term}}"></paper-input>
 <br>
 <div style="text-align:center; padding:10px;">
-<paper-button tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchData">Search</paper-button>
+<paper-button id="searchaction" tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchData">Search</paper-button>
 </div>
 </div>
 </paper-header-panel>
@@ -215,7 +215,19 @@ function process1(parm){  // jshint ignore:line
 
 //document.querySelector('#input1').value=unescape(parm);
 document.querySelector('#input1').value=decodeURIComponent(parm);
+document.querySelector('#searchaction').click();
 
+}
+
+function readhash(){
+console.log(window.location.hash);
+//console.log(this.$hash);
+var searchfor = window.location.hash.replace(/.*\/#/,'');
+console.log('searchfor', searchfor);
+if (searchfor !== ''){
+document.querySelector('#input1').value=decodeURIComponent(searchfor);
+document.querySelector('#searchaction').click();
+}
 }
 
 function appendurl(){
@@ -290,6 +302,7 @@ caches.keys().then(function(response) {  // jshint ignore:line
 
         window.addEventListener('WebComponentsReady', function() {
 
+            readhash();
             appendurl();
             var ironAjax = document.querySelector('iron-ajax');
             ironAjax.addEventListener('response', function(e) {
