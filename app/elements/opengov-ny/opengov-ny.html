@@ -30,11 +30,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </paper-toolbar>
 <div>
 <paper-input 
+id="input1"
 label="Search?"
 value="{{term}}"></paper-input>
 <br>
 <div style="text-align:center; padding:10px;">
-<paper-button tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchPractice">Search</paper-button>
+<paper-button tabindex="0" raised="true" style="background-color: lightblue;" on-click="searchData">Search</paper-button>
 </div>
 </div>
 </paper-header-panel>
@@ -131,7 +132,7 @@ value="{{term}}"></paper-input>
             };
           },
 
-          searchPractice: function () {
+          searchData: function () {
             this.$.OpenGovSearch.generateRequest();
           },
 
@@ -182,6 +183,12 @@ URL.prototype.__defineGetter__('queryterm', function() {
 });
 
 
+function process1(parm){
+
+document.querySelector('#input1').value=unescape(parm);
+
+}
+
 function appendurl(){
 caches.keys().then(function(response) {
     response.forEach(function(element, index, array) {
@@ -211,7 +218,14 @@ caches.keys().then(function(response) {
         })
 
             var div = document.createElement('div');
-            div.innerHTML= JSON.stringify(map1);
+            div.innerHTML='';
+            for (var key in map1){
+                var val=map1[key];
+                key=key.replace(/"/g,'');
+                div.innerHTML+= '<a onclick="process1(\''+key+'\');" on-click="searchData" href="#'+key+'">'+key+'&nbsp;('+val+')</a>&mdash;';
+            }
+            //div.innerHTML= JSON.stringify(map1);
+            console.log(JSON.stringify(map1));
             console.log(div.innerHTML);
             var documentBody = document.querySelector('#Links');
             documentBody.appendChild(div);
