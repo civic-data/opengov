@@ -166,7 +166,7 @@ caches.keys().then(function(response) {  // jshint ignore:line
             
             if (typeof found !== 'undefined') {
                 //cache.delete(element);
-                console.log('key',element,index,array);
+                console.log('delete',element,index,array);
                 //console.log('key',element);
                 cache.delete(element).then(function(response){console.log('response',response);});
             }
@@ -219,8 +219,10 @@ document.querySelector('#input1').value=decodeURIComponent(parm);
 }
 
 function appendurl(){
+console.log('appendurl');
 caches.keys().then(function(response) {  // jshint ignore:line
     //response.forEach(function(element, index, array) {
+    console.log('cache',response);
     response.forEach(function(element) {
         caches.open(element).then(function(x) {  // jshint ignore:line
             return x.keys();
@@ -229,6 +231,7 @@ caches.keys().then(function(response) {  // jshint ignore:line
         var count1=0;
         //items.forEach(function(element, index, array) {
         items.forEach(function(element) {
+            console.log('item', element.url);
             //console.log('item', element, element.url, index, array.length);
 
             var parser = document.createElement('a');
