@@ -149,7 +149,7 @@ value="{{term}}"></paper-input>
       </script>
 
 <script>
-function deleteall(){
+function deleteall(){ // jshint ignore:line
 caches.keys().then(function(response) {  // jshint ignore:line
     response.forEach(function(element) {
         var cache;
@@ -259,7 +259,8 @@ caches.keys().then(function(response) {  // jshint ignore:line
             //console.log(map1);
             if(count1 > 0){
             //div.innerHTML='<a onclick="deleteall();" href="#">delete-all</a>&nbsp;|&nbsp;';
-            div.innerHTML='<paper-button raised="true" style="background-color: lightblue;" onclick="deleteall()";>Delete-All</paper-button>&nbsp;|&nbsp;';
+            //div.innerHTML='<paper-button raised="true" style="background-color: lightblue;" onclick="deleteall()";>Delete-All</paper-button>&nbsp;|&nbsp;';
+            div.innerHTML='<button onclick="deleteall()";>Delete-All</button>&nbsp;|&nbsp;';
             }
             for (var key in map1){
                 var val=map1[key];
