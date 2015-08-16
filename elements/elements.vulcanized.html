@@ -17699,7 +17699,10 @@ document.querySelector('#searchaction').click();
 function readhash(){
 console.log(window.location.hash);
 //console.log(this.$hash);
-var searchfor = window.location.hash.replace(/.*\/#/,'');
+var searchfor='';
+if (/\#/.test(window.location.hash)){
+    searchfor = window.location.hash.replace(/.*\/#/,'');
+}
 console.log('searchfor', searchfor);
 if (searchfor !== ''){
 document.querySelector('#input1').value=decodeURIComponent(searchfor);
