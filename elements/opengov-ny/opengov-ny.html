@@ -223,7 +223,7 @@ function readhash(){
 console.log(window.location.hash);
 //console.log(this.$hash);
 var searchfor='';
-if (/\#/.test(window.location.hash)){
+if (/\/#/.test(window.location.hash)){
     searchfor = window.location.hash.replace(/.*\/#/,'');
 }
 console.log('searchfor', searchfor);
