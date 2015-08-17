@@ -17531,7 +17531,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div>Results</div>
         </paper-toolbar>
 <div>
-        <iron-ajax id="OpenGovSearch" url="https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp" params="{{ajaxParams}}" handle-as="json" last-response="{{data}}" loading="{{loading}}" activerequests="{{active}}" on-error="handleError">
+        <iron-ajax id="OpenGovSearch" url="https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp" term="{{term}}" params="{{ajaxParams}}" handle-as="json" last-response="{{data}}" loading="{{loading}}" activerequests="{{active}}" on-error="handleError">
 
         </iron-ajax>
 
@@ -17590,6 +17590,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               type: String,
               computed: 'buildSearchRequest(pageIdx,term)'
             }
+            //, term: term
           },
 
           stringify: JSON.stringify, 
@@ -17610,6 +17611,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
 
           searchData: function () {
+            //window.location.hash=term;
+            window.location.hash=document.querySelector('#input1').value;
             this.$.OpenGovSearch.generateRequest();
           },
 

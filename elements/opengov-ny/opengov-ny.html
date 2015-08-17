@@ -49,6 +49,7 @@ value="{{term}}"></paper-input>
 <div>
         <iron-ajax id="OpenGovSearch"
              url="https://origin-proxy.appspot.com/open.nysenate.gov/legislation/2.0/search.jsonp"
+             //term="{{term}}"
                    params="{{ajaxParams}}"
                    handle-as="json"
                    last-response="{{data}}"
@@ -113,6 +114,7 @@ value="{{term}}"></paper-input>
               type: String,
               computed: 'buildSearchRequest(pageIdx,term)'
             }
+            //, term: term
           },
 
           stringify: JSON.stringify, 
@@ -133,6 +135,8 @@ value="{{term}}"></paper-input>
           },
 
           searchData: function () {
+            //window.location.hash=term;
+            window.location.hash=document.querySelector('#input1').value;
             this.$.OpenGovSearch.generateRequest();
           },
 
