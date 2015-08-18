@@ -2,6 +2,8 @@
 import requests
 import datetime
 import time
+# put your keys in the secrets file
+import secrets
 
 # curl "http://openleg-dev.nysenate.gov/api/3/updates/2015-03-17T00:00:00/2015-03-17T01:00:00?type=processed&content-type=AGENDA&content-type=BILL&content-type=CALENDAR&detail=true&fields=true&limit=1000&key=6E9qUekhHoo4gAyZc4God2tC6KhBHxvd" 
 # 2015-08-16 23:12:53.941603
@@ -22,7 +24,8 @@ while now.year > 2014:
     now-=datetime.timedelta(hours=1)
     time1=now.strftime("%Y-%m-%dT%H:%M:%S")
 
-    result=requests.get("http://openleg-dev.nysenate.gov/api/3/updates/%s/%s?type=processed&content-type=AGENDA&content-type=BILL&content-type=CALENDAR&detail=true&fields=true&limit=1000&key=YOUR-KEY-HERE" % (time1,time2 ))
+    # result=requests.get("http://openleg-dev.nysenate.gov/api/3/updates/%s/%s?type=processed&content-type=AGENDA&content-type=BILL&content-type=CALENDAR&detail=true&fields=true&limit=1000&key=YOUR-KEY-HERE" % (time1,time2 ))
+    result=requests.get("http://openleg-dev.nysenate.gov/api/3/updates/%s/%s?type=processed&content-type=AGENDA&content-type=BILL&content-type=CALENDAR&detail=true&fields=true&limit=1000&key=%s" % (time1,time2,secrets.NY_SENATE_KEY ))
     print vars(result)
     print result.text
     time2=time1
